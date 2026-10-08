@@ -6,6 +6,7 @@ require_once __DIR__ . '/app/Models/Benchmark.php';
 require_once __DIR__ . '/app/Models/Machine.php';
 require_once __DIR__ . '/app/Helpers/format.php';
 require_once __DIR__ . '/app/Controllers/DashboardController.php';
+require_once __DIR__ . '/app/Controllers/MachineController.php';
 
 use Core\Router;
 

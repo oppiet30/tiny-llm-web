@@ -34,7 +34,11 @@ declare(strict_types=1);
         <tbody>
         <?php foreach ($machines as $machine): ?>
             <tr>
-                <td><?= htmlspecialchars($machine['hostname']) ?></td>
+                <td>
+                    <a href="machines/<?= (int)$machine['machine_id'] ?>">
+                    <?= htmlspecialchars($machine['hostname'], ENT_QUOTES, 'UTF-8') ?>
+                    </a>
+                </td>
                 <td><?= htmlspecialchars($machine['cpu_model']) ?></td>
                 <td><?= htmlspecialchars((string)($machine['cpu_cores'] ?? 'N/A')) ?></td>
                 <td><?= htmlspecialchars((string)($machine['cpu_threads'] ?? 'N/A')) ?></td>
