@@ -16,6 +16,7 @@ require_once __DIR__ . '/app/Models/Model.php';
 require_once __DIR__ . '/app/Controllers/Api/V1/ModelController.php';
 require_once __DIR__ . '/app/Controllers/Api/V1/BenchmarkController.php';
 require_once __DIR__ . '/app/Controllers/BenchmarkController.php';
+require_once __DIR__ . '/app/Controllers/CompareController.php';
 
 use Core\Router;
 

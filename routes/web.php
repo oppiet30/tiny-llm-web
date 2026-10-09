@@ -10,8 +10,10 @@ use App\Controllers\ModelsController;
 use App\Controllers\BenchmarkController;
 use App\Controllers\Api\V1\BenchmarkController as ApiBenchmarkController;
 use App\Controllers\DatasetsController;
+use App\Controllers\CompareController;
 
 $router->get('/', [new DashboardController(), 'index']);
+$router->get('/compare', [new CompareController(), 'index']);
 $router->get('/machines', [new DashboardController(), 'machines']);
 $router->get('/machines/{id}', [new MachineController(), 'show']);
 $router->get('/api/v1/machines', [new ApiMachineController(), 'index']);
