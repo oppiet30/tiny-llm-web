@@ -2,7 +2,7 @@
 
 Status reviewed: 2026-10-09.
 
-This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark database, PHP MVC dashboard, and planned comparison page. Checkboxes record confirmed work versus remaining tasks.
+This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark database, PHP MVC dashboard, and completed comparison page. Checkboxes record confirmed work versus remaining tasks.
 
 ## 1. Tiny LLM training environment
 
@@ -25,7 +25,7 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Import and verify Mini Gutenberg benchmark as run #13.
 - [x] Import and verify Euclid Huckleberry Finn 10,000-step benchmark as run #14.
 - [ ] Import future benchmark results as training completes.
-- [ ] Verify comparable runs and repeat-run handling for the comparison page.
+- [x] Verify comparable runs and repeat-run handling for the comparison page.
 
 ## 3. PHP MVC website
 
@@ -43,18 +43,18 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 ## 4. Benchmark comparison page (`/compare`)
 
 - [x] Inspect current GitHub routing, controllers, model, and views.
-- [ ] Agree on initial default dataset, model, and step count.
-- [ ] Add a Benchmark model method for comparison queries.
-- [ ] Create `app/Controllers/CompareController.php`.
-- [ ] Create `app/Views/compare.php`.
-- [ ] Register `GET /compare` in `routes/web.php`.
-- [ ] Register the controller in `index.php`.
-- [ ] Add Compare to the shared navigation.
-- [ ] Add dataset/model/step-count filters.
-- [ ] Display per-machine steps/sec, runtime, and losses.
-- [ ] Handle multiple runs from the same machine.
-- [ ] Test filtering, missing results, and benchmark consistency.
-- [ ] Commit and push the comparison feature.
+- [x] Agree on initial default dataset, model, and step count.
+- [x] Add a Benchmark model method for comparison queries.
+- [x] Create `app/Controllers/CompareController.php`.
+- [x] Create `app/Views/compare.php`.
+- [x] Register `GET /compare` in `routes/web.php`.
+- [x] Register the controller in `index.php`.
+- [x] Add Compare to the shared navigation.
+- [x] Add dataset/model/step-count filters.
+- [x] Display per-machine steps/sec, runtime, and losses.
+- [x] Handle multiple runs from the same machine.
+- [x] Test filtering, missing results, and benchmark consistency.
+- [x] Commit and push the comparison feature.
 
 **Comparison rule:** Compare only runs with the same dataset, model, and training-step count. Initially show individual runs rather than silently averaging repeated measurements.
 
@@ -68,4 +68,4 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 
 ## Next milestone
 
-Implement `/compare`. Decide whether the default group should be Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps, with selectors for other groups.
+Plan the next improvement: benchmark performance charts and repeat-run summary statistics. The `/compare` default is Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps; selectors allow other groups.
