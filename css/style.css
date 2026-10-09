@@ -42,3 +42,23 @@ td:first-child {
     font-weight: bold;
     text-align: center;
 }
+
+/* Main navigation */
+
+.dashboard-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 15px 20px;
+}
+
+nav a,
+nav .nav-separator {
+    display: inline;
+}
+
+nav .nav-separator {
+    margin: 0 6px;
+}

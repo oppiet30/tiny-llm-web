@@ -16,15 +16,14 @@ function displayValue(mixed $value): string
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= displayValue($machine['hostname']) ?> - Tiny LLM</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(BASE_PATH, ENT_QUOTES, 'UTF-8') ?>/css/style.css">
 </head>
 <body>
 <main>
     <h1><?= displayValue($machine['hostname']) ?></h1>
 
     <nav>
-        <a href="../">Dashboard</a>
-        <a href="../machines">Machines</a>
+        <?php require __DIR__ . '/partials/navigation.php'; ?>
     </nav>
 
     <h2>Hardware Specifications</h2>
@@ -88,7 +87,11 @@ function displayValue(mixed $value): string
         <tbody>
         <?php foreach ($benchmarks as $run): ?>
             <tr>
-                <td><?= (int)$run['run_id'] ?></td>
+                <td>
+                    <a href="<?= htmlspecialchars(BASE_PATH, ENT_QUOTES, 'UTF-8') ?>/runs/<?= (int)$run['run_id'] ?>">
+                        #<?= (int)$run['run_id'] ?>
+                    </a>
+                </td>
                 <td><?= displayValue($run['dataset_name']) ?></td>
                 <td><?= displayValue($run['model_name']) ?></td>
                 <td><?= number_format((int)$run['training_steps']) ?></td>

@@ -7,15 +7,24 @@ require_once __DIR__ . '/app/Models/Machine.php';
 require_once __DIR__ . '/app/Helpers/format.php';
 require_once __DIR__ . '/app/Controllers/DashboardController.php';
 require_once __DIR__ . '/app/Controllers/MachineController.php';
+require_once __DIR__ . '/app/Controllers/ModelsController.php';
+require_once __DIR__ . '/app/Controllers/DatasetsController.php';
+require_once __DIR__ . '/app/Controllers/Api/V1/MachineController.php';
+require_once __DIR__ . '/app/Models/Dataset.php';
+require_once __DIR__ . '/app/Controllers/Api/V1/DatasetController.php';
+require_once __DIR__ . '/app/Models/Model.php';
+require_once __DIR__ . '/app/Controllers/Api/V1/ModelController.php';
+require_once __DIR__ . '/app/Controllers/Api/V1/BenchmarkController.php';
+require_once __DIR__ . '/app/Controllers/BenchmarkController.php';
 
 use Core\Router;
 
 $router = new Router();
-
+define('BASE_PATH', rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/'));
 require __DIR__ . '/routes/web.php';
 
 $router->dispatch(
     $_SERVER['REQUEST_METHOD'],
     $_SERVER['REQUEST_URI'],
-    '/~oppie/tiny-llm-web'
+    BASE_PATH
 );

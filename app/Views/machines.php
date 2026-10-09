@@ -7,15 +7,14 @@ declare(strict_types=1);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Machines - Tiny LLM Benchmarks</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(BASE_PATH, ENT_QUOTES, 'UTF-8') ?>/css/style.css">
 </head>
 <body>
 <main>
     <h1>Benchmark Machines</h1>
 
     <nav>
-        <a href="./">Dashboard</a>
-        <a href="machines">Machines</a>
+        <?php require __DIR__ . '/partials/navigation.php'; ?>
     </nav>
 
     <p>Hardware used for TinyGPT training benchmarks.</p>
@@ -35,7 +34,7 @@ declare(strict_types=1);
         <?php foreach ($machines as $machine): ?>
             <tr>
                 <td>
-                    <a href="machines/<?= (int)$machine['machine_id'] ?>">
+                    <a href="<?= htmlspecialchars(BASE_PATH, ENT_QUOTES, 'UTF-8') ?>/machines/<?= (int)$machine['machine_id'] ?>">
                     <?= htmlspecialchars($machine['hostname'], ENT_QUOTES, 'UTF-8') ?>
                     </a>
                 </td>
