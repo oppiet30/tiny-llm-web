@@ -11,7 +11,7 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Run initial 3,000-step Huckleberry Finn benchmarks on all five machines.
 - [x] Create Gutenberg 50 MiB training dataset.
 - [x] Complete 10,000-step Gutenberg runs on Euclid, OptiPlex 3040, Dell, and Mini.
-- [ ] Complete Euclid's 10,000-step Huckleberry Finn training and import results (training was already started; confirm completion).
+- [x] Complete Euclid's 10,000-step Huckleberry Finn training and import results (run #14; 3.241 steps/sec).
 - [ ] Complete missing benchmark runs, including Raspberry Pi 5 Gutenberg.
 
 ## 2. MariaDB benchmark database
@@ -23,6 +23,7 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Correct steps-per-second calculation for resumed runs.
 - [x] Version `database/schema.sql` in the Tiny LLM training repository.
 - [x] Import and verify Mini Gutenberg benchmark as run #13.
+- [x] Import and verify Euclid Huckleberry Finn 10,000-step benchmark as run #14.
 - [ ] Import future benchmark results as training completes.
 - [ ] Verify comparable runs and repeat-run handling for the comparison page.
 
