@@ -36,5 +36,8 @@ jobs:
             php -l "$file"
           done < <(find . -path './vendor' -prune -o -path './.git' -prune -o -name '*.php' -type f -print0)
 
-      - name: Run PHPUnit
-        run: composer test
+      - name: Build isolated test image
+        run: docker build --file Dockerfile.test --tag tiny-llm-web-tests .
+
+      - name: Run PHPUnit in Docker
+        run: docker run --rm tiny-llm-web-tests
