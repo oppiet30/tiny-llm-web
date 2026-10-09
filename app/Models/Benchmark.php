@@ -137,6 +137,51 @@ class Benchmark
 
         return $benchmarks;
     }
+    /**
+     * Return individual runs for one comparable dataset/model/step-count group.
+     *
+     * Repeated measurements are kept as separate rows.
+     */
+    public function compare(int $datasetId, int $modelId, int $trainingSteps): array
+    {
+        $sql = "
+            SELECT
+                b.run_id,
+                b.machine_id,
+                m.hostname,
+                m.cpu_model,
+                b.dataset_id,
+                d.name AS dataset_name,
+                b.model_id,
+                mo.name AS model_name,
+                b.start_step,
+                b.training_steps,
+                b.steps_this_run,
+                b.real_seconds,
+                b.train_loss,
+                b.validation_loss,
+                b.run_date,
+                COALESCE(b.steps_this_run, b.training_steps)
+                    / NULLIF(b.real_seconds, 0) AS steps_per_second
+            FROM benchmark_runs b
+            JOIN machines m ON m.machine_id = b.machine_id
+            JOIN datasets d ON d.dataset_id = b.dataset_id
+            JOIN models mo ON mo.model_id = b.model_id
+            WHERE b.dataset_id = ?
+              AND b.model_id = ?
+              AND b.training_steps = ?
+            ORDER BY steps_per_second DESC, b.run_id DESC
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('iii', $datasetId, $modelId, $trainingSteps);
+        $stmt->execute();
+        $runs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $runs;
+    }
+
     public function find(int $id): ?array
     {
         $sql = "
