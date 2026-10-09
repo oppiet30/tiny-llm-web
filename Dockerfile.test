@@ -1,0 +1,18 @@
+FROM php:8.5-cli
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git unzip libonig-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install mysqli mbstring
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+WORKDIR /app
+COPY composer.json phpunit.xml ./
+COPY tests/ tests/
+COPY core/Router.php core/Router.php
+COPY app/Helpers/format.php app/Helpers/format.php
+
+RUN composer update --no-interaction --prefer-dist
+
+CMD ["composer", "test"]

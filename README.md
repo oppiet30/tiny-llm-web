@@ -1,5 +1,7 @@
 # Tiny LLM Web
 
+[![PHP tests](https://github.com/oppiet30/tiny-llm-web/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/oppiet30/tiny-llm-web/actions/workflows/tests.yml)
+
 A lightweight PHP MVC dashboard for viewing and comparing CPU-based TinyGPT training benchmarks stored in MariaDB.
 
 The application is part of the Tiny LLM project and provides a web interface and versioned JSON API for benchmark runs, machines, models, and datasets.

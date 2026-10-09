@@ -1,0 +1,43 @@
+name: PHP tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mysqli, dom, mbstring, xml, xmlwriter
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            php -l "$file"
+          done < <(find . -path './vendor' -prune -o -path './.git' -prune -o -name '*.php' -type f -print0)
+
+      - name: Build isolated test image
+        run: docker build --file Dockerfile.test --tag tiny-llm-web-tests .
+
+      - name: Run PHPUnit in Docker
+        run: docker run --rm tiny-llm-web-tests
