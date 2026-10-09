@@ -49,6 +49,6 @@ class CompareController
             $benchmarks = (new Benchmark($db))->compare($datasetId, $modelId, $trainingSteps);
         }
 
-        require __DIR__ . '/../Views/compare.php';
+        $statistics = BenchmarkStatistics::byMachine($benchmarks);\n\n        require __DIR__ . '/../Views/compare.php';
     }
 }
