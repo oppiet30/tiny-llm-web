@@ -16,3 +16,4 @@ COPY app/Helpers/format.php app/Helpers/format.php
 RUN composer update --no-interaction --prefer-dist
 
 CMD ["composer", "test"]
+COPY app/Helpers/BenchmarkStatistics.php app/Helpers/BenchmarkStatistics.php
