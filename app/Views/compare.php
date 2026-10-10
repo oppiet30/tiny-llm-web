@@ -46,34 +46,77 @@ $baseUrl = $escape(BASE_PATH);
             <?php endforeach; ?>
         </select>
 
+        <label for="chart_mode">Chart view</label>
+        <select name="chart_mode" id="chart_mode">
+            <option value="average" <?= $chartMode === 'average' ? 'selected' : '' ?>>Machine averages</option>
+            <option value="runs" <?= $chartMode === 'runs' ? 'selected' : '' ?>>Individual runs</option>
+        </select>
+
         <label for="training_steps">Training steps</label>
         <input type="number" id="training_steps" name="training_steps"
                min="1" step="1" required value="<?= (int)$trainingSteps ?>">
         <button type="submit">Compare</button>
     </form>
 
-    <?php if (!empty($statistics)): ?>
-        <?php $maxMean = max(array_column($statistics, 'mean')); ?>
-        <section class="benchmark-statistics" aria-labelledby="statistics-heading">
-            <h2 id="statistics-heading">Machine performance summary</h2>
-            <p>Average throughput across matching runs. Bars are scaled to the fastest machine in this comparison.</p>
-            <div class="throughput-chart">
-                <?php foreach ($statistics as $stat): ?>
-                    <?php $barWidth = $maxMean > 0 ? ($stat['mean'] / $maxMean) * 100 : 0; ?>
-                    <div class="throughput-row">
-                        <div class="throughput-label">
-                            <span><?= $escape($stat['hostname']) ?></span>
-                            <strong><?= number_format($stat['mean'], 3) ?> steps/sec</strong>
-                        </div>
-                        <div class="throughput-track" role="img"
-                             aria-label="<?= $escape($stat['hostname']) ?> average throughput <?= number_format($stat['mean'], 3) ?> steps per second">
-                            <div class="throughput-bar" style="width: <?= number_format($barWidth, 4, '.', '') ?>%"></div>
-                        </div>
+    <?php if (!empty($benchmarks)): ?>
+        <section class="benchmark-statistics" aria-labelledby="comparison-chart-heading">
+            <h2 id="comparison-chart-heading"><?= $chartMode === 'runs' ? 'Individual run throughput' : 'Machine average throughput' ?></h2>
+            <?php if ($chartMode === 'runs'): ?>
+                <p>Each bar represents one matching benchmark run. Bars are scaled to the fastest run.</p>
+                <?php
+                $validRuns = array_values(array_filter($benchmarks, static fn(array $run): bool =>
+                    isset($run['steps_per_second']) && is_numeric($run['steps_per_second'])
+                    && is_finite((float) $run['steps_per_second']) && (float) $run['steps_per_second'] > 0
+                ));
+                $maxRunThroughput = $validRuns === [] ? 0.0 : max(array_map(
+                    static fn(array $run): float => (float) $run['steps_per_second'],
+                    $validRuns
+                ));
+                ?>
+                <?php if ($validRuns === []): ?>
+                    <p>No valid per-run throughput measurements are available for this comparison.</p>
+                <?php else: ?>
+                    <div class="throughput-chart">
+                        <?php foreach ($validRuns as $run): ?>
+                            <?php $width = $maxRunThroughput > 0 ? ((float) $run['steps_per_second'] / $maxRunThroughput) * 100 : 0; ?>
+                            <div class="throughput-row">
+                                <div class="throughput-label">
+                                    <span><a href="<?= $baseUrl ?>/runs/<?= (int) $run['run_id'] ?>">Run #<?= (int) $run['run_id'] ?></a> · <?= $escape($run['hostname']) ?></span>
+                                    <strong><?= number_format((float) $run['steps_per_second'], 3) ?> steps/sec</strong>
+                                </div>
+                                <div class="throughput-track" role="img" aria-label="Run <?= (int) $run['run_id'] ?> throughput <?= number_format((float) $run['steps_per_second'], 3) ?> steps per second">
+                                    <div class="throughput-bar" style="width: <?= number_format($width, 4, '.', '') ?>%"></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
-            </div>
-
-            <h3>Repeat-run statistics</h3>
+                <?php endif; ?>
+            <?php else: ?>
+                <p>Average throughput across matching runs. Bars are scaled to the fastest machine.</p>
+                <?php if (!empty($statistics)): ?>
+                    <?php $maxMean = max(array_column($statistics, 'mean')); ?>
+                    <div class="throughput-chart">
+                        <?php foreach ($statistics as $stat): ?>
+                            <?php $barWidth = $maxMean > 0 ? ($stat['mean'] / $maxMean) * 100 : 0; ?>
+                            <div class="throughput-row">
+                                <div class="throughput-label">
+                                    <span><?= $escape($stat['hostname']) ?></span>
+                                    <strong><?= number_format($stat['mean'], 3) ?> steps/sec</strong>
+                                </div>
+                                <div class="throughput-track" role="img" aria-label="<?= $escape($stat['hostname']) ?> average throughput <?= number_format($stat['mean'], 3) ?> steps per second">
+                                    <div class="throughput-bar" style="width: <?= number_format($barWidth, 4, '.', '') ?>%"></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p>No valid machine-average measurements are available for this comparison.</p>
+                <?php endif; ?>
+            <?php endif; ?>
+        </section>
+        <?php if (!empty($statistics)): ?>
+        <section class="benchmark-statistics" aria-labelledby="repeat-statistics-heading">
+            <h2 id="repeat-statistics-heading">Repeat-run statistics</h2>
             <p>Standard deviation is the sample standard deviation and is unavailable when a machine has only one valid run.</p>
             <div class="table-scroll">
                 <table>
@@ -102,6 +145,7 @@ $baseUrl = $escape(BASE_PATH);
                 </table>
             </div>
         </section>
+        <?php endif; ?>
     <?php endif; ?>
 
     <h2>Matching runs (<?= count($benchmarks) ?>)</h2>
