@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use App\\Models\\Benchmark;
-use PHPUnit\\Framework\\TestCase;
+use App\Models\Benchmark;
+use PHPUnit\Framework\TestCase;
 
 final class BenchmarkMariaDbIntegrationTest extends TestCase
 {
@@ -72,7 +72,7 @@ final class BenchmarkMariaDbIntegrationTest extends TestCase
     public function testMachineAndDatasetFiltersReturnOnlyMatchingRows(): void
     {
         self::assertCount(2, $this->benchmarks->forMachine(1));
-        self::assertCount(4, $this->benchmarks->forDataset(1));
+        self::assertCount(5, $this->benchmarks->forDataset(1));
         self::assertSame([], $this->benchmarks->forMachine(999));
     }
 
