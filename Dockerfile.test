@@ -12,6 +12,8 @@ COPY composer.json phpunit.xml ./
 COPY tests/ tests/
 COPY core/Router.php core/Router.php
 COPY app/Helpers/format.php app/Helpers/format.php
+COPY app/Views/history.php app/Views/history.php
+COPY app/Views/partials/navigation.php app/Views/partials/navigation.php
 
 RUN composer update --no-interaction --prefer-dist
 

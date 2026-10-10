@@ -76,6 +76,21 @@ final class BenchmarkMariaDbIntegrationTest extends TestCase
         self::assertSame([], $this->benchmarks->forMachine(999));
     }
 
+    public function testHistoryReturnsRunsChronologicallyAndSupportsFilters(): void
+    {
+        $all = $this->benchmarks->history();
+        self::assertCount(6, $all);
+        self::assertSame(1, (int) $all[0]['run_id']);
+        self::assertSame(6, (int) $all[5]['run_id']);
+
+        $machineRuns = $this->benchmarks->history(1, 1, 1);
+        self::assertCount(2, $machineRuns);
+        self::assertSame([1, 2], array_map(
+            static fn(array $run): int => (int) $run['run_id'],
+            $machineRuns
+        ));
+    }
+
     public function testFindReturnsNullForMissingRun(): void
     {
         self::assertNull($this->benchmarks->find(999));

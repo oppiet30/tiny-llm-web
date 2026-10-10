@@ -182,6 +182,55 @@ class Benchmark
         return $runs;
     }
 
+
+    /**
+     * Return benchmark runs ordered by date, with optional dataset/model/machine filters.
+     */
+    public function history(?int $datasetId = null, ?int $modelId = null, ?int $machineId = null): array
+    {
+        $sql = "
+            SELECT
+                b.run_id, b.machine_id, m.hostname, b.dataset_id,
+                d.name AS dataset_name, b.model_id, mo.name AS model_name,
+                b.training_steps, b.steps_this_run, b.real_seconds, b.run_date,
+                COALESCE(b.steps_this_run, b.training_steps)
+                    / NULLIF(b.real_seconds, 0) AS steps_per_second
+            FROM benchmark_runs b
+            JOIN machines m ON m.machine_id = b.machine_id
+            JOIN datasets d ON d.dataset_id = b.dataset_id
+            JOIN models mo ON mo.model_id = b.model_id
+        ";
+        $conditions = [];
+        $types = '';
+        $values = [];
+        foreach ([
+            ['b.dataset_id', $datasetId],
+            ['b.model_id', $modelId],
+            ['b.machine_id', $machineId],
+        ] as [$column, $value]) {
+            if ($value !== null) {
+                $conditions[] = $column . ' = ?';
+                $types .= 'i';
+                $values[] = $value;
+            }
+        }
+        if ($conditions !== []) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+        $sql .= ' ORDER BY b.run_date ASC, b.run_id ASC';
+
+        $stmt = $this->db->prepare($sql);
+        if ($values !== []) {
+            $stmt->bind_param($types, ...$values);
+        }
+        $stmt->execute();
+        $runs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $runs;
+    }
+
+
     public function find(int $id): ?array
     {
         $sql = "

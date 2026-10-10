@@ -12,3 +12,4 @@ $baseUrl = htmlspecialchars(
     <a href="<?= $baseUrl ?>/models">Models</a>
     <a href="<?= $baseUrl ?>/datasets">Datasets</a>
     <a href="<?= $baseUrl ?>/compare">Compare</a>
+    <a href="<?= $baseUrl ?>/history">History</a>
