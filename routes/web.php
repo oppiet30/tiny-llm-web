@@ -14,6 +14,7 @@ use App\Controllers\CompareController;
 
 $router->get('/', [new DashboardController(), 'index']);
 $router->get('/compare', [new CompareController(), 'index']);
+$router->get('/history', [new HistoryController(), 'index']);
 $router->get('/machines', [new DashboardController(), 'machines']);
 $router->get('/machines/{id}', [new MachineController(), 'show']);
 $router->get('/api/v1/machines', [new ApiMachineController(), 'index']);
