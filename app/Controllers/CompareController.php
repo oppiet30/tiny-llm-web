@@ -45,6 +45,9 @@ class CompareController
         $trainingSteps = $trainingSteps !== null && $trainingSteps !== false && $trainingSteps > 0
             ? $trainingSteps : 10000;
 
+        $chartMode = filter_input(INPUT_GET, 'chart_mode', FILTER_UNSAFE_RAW);
+        $chartMode = in_array($chartMode, ['average', 'runs'], true) ? $chartMode : 'average';
+
         $benchmarks = [];
         if ($datasetId !== null && $modelId !== null) {
             $benchmarks = (new Benchmark($db))->compare($datasetId, $modelId, $trainingSteps);
