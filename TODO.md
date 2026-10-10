@@ -2,7 +2,7 @@
 
 Status reviewed: 2026-10-09.
 
-This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark database, PHP MVC dashboard, and completed comparison page. Checkboxes record confirmed work versus remaining tasks.
+This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark database, PHP MVC dashboard, comparison charts, and automated tests. Checkboxes record confirmed work versus remaining tasks.
 
 ## 1. Tiny LLM training environment
 
@@ -39,6 +39,11 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Commit 24 updated application files as `47ed13f`.
 - [x] Push `47ed13f` to `oppiet30/tiny-llm-web` main.
 - [ ] Test application pages and API endpoints after future updates.
+- [x] Add PHPUnit 13 unit tests for router, duration formatting, and benchmark summary calculations (PR #2).
+- [x] Add a PHP 8.5 Docker test environment and GitHub Actions CI checks (PR #1).
+- [x] Add a clickable GitHub Actions status badge to README.
+- [x] Remove misplaced `train.py` from the web repository (PR #4); training code remains in `oppiet30/tiny-llm`.
+- [ ] Confirm benchmark charts and summary statistics render correctly on Dell's Apache/PHP installation.
 
 ## 4. Benchmark comparison page (`/compare`)
 
@@ -56,16 +61,18 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Test filtering, missing results, and benchmark consistency.
 - [x] Commit and push the comparison feature.
 
-**Comparison rule:** Compare only runs with the same dataset, model, and training-step count. Initially show individual runs rather than silently averaging repeated measurements.
+**Comparison rule:** Compare only runs with the same dataset, model, and training-step count. Continue listing individual runs; show machine-level averages separately, without silently replacing individual measurements.
 
 ## 5. Later improvements
 
-- [ ] Add benchmark performance charts.
-- [ ] Compare CPU training throughput across machines.
-- [ ] Add repeat-run averages and performance variability.
+- [x] Add responsive CSS-based benchmark performance charts to `/compare` (PR #3).
+- [x] Compare mean CPU training throughput across machines for matching workload filters (PR #3).
+- [x] Add repeat-run count, mean, minimum, maximum, and sample standard deviation (PR #3).
+- [x] Expand the project README with installation, routes, API, and development guidance.
 - [ ] Add additional benchmarks and historical trend views.
-- [ ] Improve project documentation and benchmark reproduction instructions.
+- [ ] Improve benchmark reproduction instructions and document the measurement methodology.
+- [ ] Add database-backed integration tests with disposable MariaDB fixtures.
 
 ## Next milestone
 
-Plan the next improvement: benchmark performance charts and repeat-run summary statistics. The `/compare` default is Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps; selectors allow other groups.
+Verify `/compare` chart rendering and responsive layout on Dell with real benchmark data, then expand integration coverage and benchmark history visualizations. The `/compare` default remains Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps; selectors allow other groups.
