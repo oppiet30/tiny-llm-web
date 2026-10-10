@@ -58,7 +58,7 @@ $baseUrl = $escape(BASE_PATH);
         <button type="submit">Compare</button>
     </form>
 
-    <?php if (!empty($statistics)): ?>
+    <?php if (!empty($benchmarks)): ?>
         <section class="benchmark-statistics" aria-labelledby="comparison-chart-heading">
             <h2 id="comparison-chart-heading"><?= $chartMode === 'runs' ? 'Individual run throughput' : 'Machine average throughput' ?></h2>
             <?php if ($chartMode === 'runs'): ?>
@@ -114,7 +114,9 @@ $baseUrl = $escape(BASE_PATH);
                 <?php endif; ?>
             <?php endif; ?>
         </section>
-            <h3>Repeat-run statistics</h3>
+        <?php if (!empty($statistics)): ?>
+        <section class="benchmark-statistics" aria-labelledby="repeat-statistics-heading">
+            <h2 id="repeat-statistics-heading">Repeat-run statistics</h2>
             <p>Standard deviation is the sample standard deviation and is unavailable when a machine has only one valid run.</p>
             <div class="table-scroll">
                 <table>
@@ -143,6 +145,7 @@ $baseUrl = $escape(BASE_PATH);
                 </table>
             </div>
         </section>
+        <?php endif; ?>
     <?php endif; ?>
 
     <h2>Matching runs (<?= count($benchmarks) ?>)</h2>

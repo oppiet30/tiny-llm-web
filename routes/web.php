@@ -11,6 +11,7 @@ use App\Controllers\BenchmarkController;
 use App\Controllers\Api\V1\BenchmarkController as ApiBenchmarkController;
 use App\Controllers\DatasetsController;
 use App\Controllers\CompareController;
+use App\Controllers\HistoryController;
 
 $router->get('/', [new DashboardController(), 'index']);
 $router->get('/compare', [new CompareController(), 'index']);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\BenchmarkStatistics;
+use App\Helpers\CompareChartMode;
 use App\Models\Benchmark;
 use App\Models\Dataset;
 use App\Models\Model;
@@ -45,8 +46,7 @@ class CompareController
         $trainingSteps = $trainingSteps !== null && $trainingSteps !== false && $trainingSteps > 0
             ? $trainingSteps : 10000;
 
-        $chartMode = filter_input(INPUT_GET, 'chart_mode', FILTER_UNSAFE_RAW);
-        $chartMode = in_array($chartMode, ['average', 'runs'], true) ? $chartMode : 'average';
+        $chartMode = CompareChartMode::normalize(filter_input(INPUT_GET, 'chart_mode', FILTER_UNSAFE_RAW));
 
         $benchmarks = [];
         if ($datasetId !== null && $modelId !== null) {
