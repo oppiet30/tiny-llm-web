@@ -62,3 +62,70 @@ nav .nav-separator {
 nav .nav-separator {
     margin: 0 6px;
 }
+
+
+/* Benchmark comparison: responsive throughput bars and statistics table. */
+.benchmark-statistics {
+    margin: 32px 0;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.throughput-chart {
+    display: grid;
+    gap: 16px;
+    margin: 20px 0 28px;
+}
+
+.throughput-row {
+    min-width: 0;
+}
+
+.throughput-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.throughput-track {
+    width: 100%;
+    height: 22px;
+    overflow: hidden;
+    background: #e8e8e8;
+    border-radius: 4px;
+}
+
+.throughput-bar {
+    height: 100%;
+    min-width: 2px;
+    background: #2878b5;
+    border-radius: 4px;
+}
+
+.table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table-scroll table {
+    margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+    .benchmark-statistics {
+        padding: 12px;
+    }
+
+    .throughput-label {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+}

@@ -52,6 +52,58 @@ $baseUrl = $escape(BASE_PATH);
         <button type="submit">Compare</button>
     </form>
 
+    <?php if (!empty($statistics)): ?>
+        <?php $maxMean = max(array_column($statistics, 'mean')); ?>
+        <section class="benchmark-statistics" aria-labelledby="statistics-heading">
+            <h2 id="statistics-heading">Machine performance summary</h2>
+            <p>Average throughput across matching runs. Bars are scaled to the fastest machine in this comparison.</p>
+            <div class="throughput-chart">
+                <?php foreach ($statistics as $stat): ?>
+                    <?php $barWidth = $maxMean > 0 ? ($stat['mean'] / $maxMean) * 100 : 0; ?>
+                    <div class="throughput-row">
+                        <div class="throughput-label">
+                            <span><?= $escape($stat['hostname']) ?></span>
+                            <strong><?= number_format($stat['mean'], 3) ?> steps/sec</strong>
+                        </div>
+                        <div class="throughput-track" role="img"
+                             aria-label="<?= $escape($stat['hostname']) ?> average throughput <?= number_format($stat['mean'], 3) ?> steps per second">
+                            <div class="throughput-bar" style="width: <?= number_format($barWidth, 4, '.', '') ?>%"></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <h3>Repeat-run statistics</h3>
+            <p>Standard deviation is the sample standard deviation and is unavailable when a machine has only one valid run.</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Machine</th>
+                            <th>Runs</th>
+                            <th>Average steps/sec</th>
+                            <th>Minimum</th>
+                            <th>Maximum</th>
+                            <th>Std. deviation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($statistics as $stat): ?>
+                            <tr>
+                                <td><?= $escape($stat['hostname']) ?></td>
+                                <td><?= (int) $stat['count'] ?></td>
+                                <td><?= number_format($stat['mean'], 3) ?></td>
+                                <td><?= number_format($stat['min'], 3) ?></td>
+                                <td><?= number_format($stat['max'], 3) ?></td>
+                                <td><?= $stat['stddev'] !== null ? number_format($stat['stddev'], 3) : 'N/A' ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    <?php endif; ?>
+
     <h2>Matching runs (<?= count($benchmarks) ?>)</h2>
 
     <?php if (empty($benchmarks)): ?>

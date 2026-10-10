@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Helpers\BenchmarkStatistics;
 use App\Models\Benchmark;
 use App\Models\Dataset;
 use App\Models\Model;
@@ -48,6 +49,8 @@ class CompareController
         if ($datasetId !== null && $modelId !== null) {
             $benchmarks = (new Benchmark($db))->compare($datasetId, $modelId, $trainingSteps);
         }
+
+        $statistics = BenchmarkStatistics::byMachine($benchmarks);
 
         require __DIR__ . '/../Views/compare.php';
     }
