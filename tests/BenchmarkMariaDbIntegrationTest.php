@@ -4,6 +4,8 @@ declare(strict_types=1);
 use App\\Models\\Benchmark;
 use PHPUnit\\Framework\\TestCase;
 
+require_once __DIR__ . '/../app/Models/Benchmark.php';
+
 final class BenchmarkMariaDbIntegrationTest extends TestCase
 {
     private static ?mysqli $db = null;
@@ -24,12 +26,6 @@ final class BenchmarkMariaDbIntegrationTest extends TestCase
             (int) (getenv('TINY_LLM_TEST_DB_PORT') ?: 3306)
         );
         self::$db->set_charset('utf8mb4');
-        self::$db->multi_query(file_get_contents(__DIR__ . '/fixtures/mariadb-integration.sql'));
-        do {
-            if ($result = self::$db->store_result()) {
-                $result->free();
-            }
-        } while (self::$db->more_results() && self::$db->next_result());
     }
 
     protected function setUp(): void
