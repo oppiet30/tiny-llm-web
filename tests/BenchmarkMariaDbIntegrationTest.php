@@ -4,8 +4,6 @@ declare(strict_types=1);
 use App\\Models\\Benchmark;
 use PHPUnit\\Framework\\TestCase;
 
-require_once __DIR__ . '/../app/Models/Benchmark.php';
-
 final class BenchmarkMariaDbIntegrationTest extends TestCase
 {
     private static ?mysqli $db = null;
@@ -17,6 +15,7 @@ final class BenchmarkMariaDbIntegrationTest extends TestCase
             self::markTestSkipped('MariaDB integration environment is not configured.');
         }
 
+        require_once __DIR__ . '/../app/Models/Benchmark.php';
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         self::$db = new mysqli(
             (string) getenv('TINY_LLM_TEST_DB_HOST'),
