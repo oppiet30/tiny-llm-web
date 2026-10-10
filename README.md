@@ -70,16 +70,14 @@ Edit `config.local.php` and set the database host, username, password, and datab
 ```php
 <?php
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 $db = new mysqli(
     'localhost',
     'your_database_user',
     'your_database_password',
     'tiny_llm_benchmarks'
 );
-
-if ($db->connect_errno) {
-    die('Database connection failed: ' . $db->connect_error);
-}
 
 $db->set_charset('utf8mb4');
 ```
