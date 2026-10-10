@@ -168,6 +168,12 @@ Automated PHPUnit tests, a Docker-based test image, and a GitHub Actions workflo
 
 This project is actively developed. Check [TODO.md](https://github.com/oppiet30/tiny-llm-web/blob/main/TODO.md) for the current website checklist and planned improvements.
 
+## Support Tiny LLM
+
+Tiny LLM is free and open source. Optional sponsorships help cover domain renewal, website hosting, and continued development.
+
+[Support Tiny LLM on GitHub Sponsors](https://github.com/sponsors/oppiet30)
+
 ## License
 
 See [LICENSE](LICENSE) for the project's license terms.
