@@ -18,7 +18,7 @@ final class CompareChartTest extends TestCase
 
     public function testAverageChartGroupsRepeatedRunsAndScalesByFastestMean(): void
     {
-        $html = $this->render('average', [$this->run(1, 1, 10), $this->run(2, 1, 20), $this->run(3, 2, 5)]);
+        $html = $this->render('average', [$this->benchmarkRun(1, 1, 10), $this->benchmarkRun(2, 1, 20), $this->benchmarkRun(3, 2, 5)]);
         self::assertStringContainsString('Machine average throughput', $html);
         self::assertStringContainsString('value="average" selected', $html);
         self::assertSame(2, substr_count($html, 'class="throughput-row"'));
@@ -32,7 +32,7 @@ final class CompareChartTest extends TestCase
 
     public function testRunChartKeepsRepeatedRunsAndScalesByFastestRun(): void
     {
-        $html = $this->render('runs', [$this->run(1, 1, 10), $this->run(2, 1, 20), $this->run(3, 2, 5)]);
+        $html = $this->render('runs', [$this->benchmarkRun(1, 1, 10), $this->benchmarkRun(2, 1, 20), $this->benchmarkRun(3, 2, 5)]);
         self::assertStringContainsString('Individual run throughput', $html);
         self::assertStringContainsString('value="runs" selected', $html);
         self::assertSame(3, substr_count($html, 'class="throughput-row"'));
@@ -45,9 +45,9 @@ final class CompareChartTest extends TestCase
 
     public function testInvalidMeasurementsAreExcludedFromRunBars(): void
     {
-        $runs = [$this->run(1, 1, 10)];
+        $runs = [$this->benchmarkRun(1, 1, 10)];
         foreach ([null, 0, -1, INF, NAN, 'invalid'] as $index => $value) {
-            $runs[] = $this->run($index + 2, 1, $value);
+            $runs[] = $this->benchmarkRun($index + 2, 1, $value);
         }
         $html = $this->render('runs', $runs);
         self::assertSame(1, substr_count($html, 'class="throughput-row"'));
@@ -57,7 +57,7 @@ final class CompareChartTest extends TestCase
     public function testMissingMeasurementsShowChartEmptyStates(): void
     {
         foreach (['average' => 'No valid machine-average measurements', 'runs' => 'No valid per-run throughput measurements'] as $mode => $message) {
-            $html = $this->render($mode, [$this->run(1, 1, null)]);
+            $html = $this->render($mode, [$this->benchmarkRun(1, 1, null)]);
             self::assertStringContainsString($message, $html);
             self::assertStringNotContainsString('class="throughput-row"', $html);
             self::assertStringContainsString('Matching runs (1)', $html);
@@ -75,7 +75,7 @@ final class CompareChartTest extends TestCase
 
     public function testChartEscapesHostnamesInBothModes(): void
     {
-        $run = $this->run(1, 1, 10);
+        $run = $this->benchmarkRun(1, 1, 10);
         $run['hostname'] = '<script>alert(1)</script>';
         foreach (['average', 'runs'] as $mode) {
             $html = $this->render($mode, [$run]);
@@ -84,7 +84,7 @@ final class CompareChartTest extends TestCase
         }
     }
 
-    private function run(int $id, int $machine, mixed $throughput): array
+    private function benchmarkRun(int $id, int $machine, mixed $throughput): array
     {
         return [
             'run_id' => $id, 'machine_id' => $machine, 'hostname' => 'machine-' . $machine,
