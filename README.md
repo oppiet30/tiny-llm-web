@@ -71,16 +71,14 @@ Edit `config.local.php` and set the database host, username, password, and datab
 ```php
 <?php
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 $db = new mysqli(
     'localhost',
     'your_database_user',
     'your_database_password',
     'tiny_llm_benchmarks'
 );
-
-if ($db->connect_errno) {
-    die('Database connection failed: ' . $db->connect_error);
-}
 
 $db->set_charset('utf8mb4');
 ```
@@ -130,7 +128,19 @@ The exact URL depends on the server configuration. The application derives its b
 | `/api/v1/runs` | List benchmark runs |
 | `/api/v1/runs/{id}` | Retrieve one benchmark run |
 
-When installed below a URL prefix, prepend that prefix to the routes above.
+All API routes use `GET`. Lists return `{ "data": [...], "count": 2 }`; individual records return `{ "data": {...} }`. Machine-run lists also include `machine_id` and `hostname`. Empty lists return HTTP 200 with `data: []` and `count: 0`.
+
+Malformed, zero, out-of-range, or missing IDs return HTTP 404 with an `error` message. IDs must fit PHP's positive integer range. Unknown API routes also return JSON 404; unsupported methods on known routes return JSON 405 with `Allow: GET`. Unexpected application/database exceptions return JSON 500 with a generic error; details go to the server log. Local configuration should throw exceptions rather than print credentials or call `die()` (see `config.example.php`).
+
+When installed below a URL prefix, prepend that prefix to the routes above. For example:
+
+```bash
+curl -i https://example.com/tiny-llm-web/api/v1/machines
+curl -i https://example.com/tiny-llm-web/api/v1/runs/1
+curl -i https://example.com/tiny-llm-web/api/v1/runs/0
+```
+
+The MariaDB CI job runs `python3 scripts/check-api.py` against an isolated copy of the application and the disposable fixture database. It checks all nine endpoints, invalid/missing IDs, JSON content types, unsupported methods, subdirectory routing, and safe error responses. It does not access production configuration.
 
 ## Benchmark comparison
 
@@ -173,7 +183,7 @@ docker build -f Dockerfile.test -t tiny-llm-web-tests .
 docker run --rm tiny-llm-web-tests
 ```
 
-MariaDB integration tests skip without a configured test database. GitHub Actions runs them separately against a disposable MariaDB 11.8 database initialized from `tests/fixtures/mariadb-integration.sql`; never load that fixture into the production benchmark database. The workflow also checks PHP syntax and runs the Docker PHPUnit suite.
+MariaDB integration tests skip without a configured test database. GitHub Actions runs them separately against a disposable MariaDB 11.8 database initialized from `tests/fixtures/mariadb-integration.sql`; never load that fixture into the production benchmark database. The workflow also checks PHP syntax, runs the Docker PHPUnit suite, and runs API HTTP checks against the disposable database. Check the Actions tab for the current results.
 
 ## Security notes
 

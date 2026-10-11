@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Core;
 
+require_once __DIR__ . '/ApiResponse.php';
+
 class Router
 {
     private array $routes = [];
@@ -73,6 +75,30 @@ class Router
                 call_user_func_array($handler, $matches);
                 return;
             }
+        }
+
+        if (ApiResponse::isApiPath($path)) {
+            $allowed = [];
+            foreach ($this->routes as $routeMethod => $routes) {
+                foreach ($routes as $route => $handler) {
+                    $pattern = preg_replace(
+                        '/\\\\\{[a-zA-Z_][a-zA-Z0-9_]*\\\\\}/',
+                        '([^/]+)',
+                        preg_quote($route, '#')
+                    );
+                    if ($pattern !== null && preg_match('#^' . $pattern . '$#D', $path)) {
+                        $allowed[] = $routeMethod;
+                        break;
+                    }
+                }
+            }
+            if ($allowed !== []) {
+                header('Allow: ' . implode(', ', $allowed));
+                ApiResponse::error(405, 'Method not allowed');
+            } else {
+                ApiResponse::error(404, 'API route not found');
+            }
+            return;
         }
 
         http_response_code(404);

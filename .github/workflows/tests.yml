@@ -86,3 +86,6 @@ jobs:
 
       - name: Run MariaDB integration tests
         run: vendor/bin/phpunit --filter MariaDbIntegration
+
+      - name: Check API HTTP responses
+        run: python3 scripts/check-api.py

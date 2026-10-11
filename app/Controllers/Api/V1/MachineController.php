@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controllers\Api\V1;
 
+use Core\ApiResponse;
+
 use App\Models\Machine;
 use App\Models\Benchmark;
 
@@ -12,7 +14,7 @@ class MachineController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        if (!ctype_digit($id) || (int)$id < 1) {
+        if (!ApiResponse::validId($id)) {
             http_response_code(404);
             echo json_encode(['error' => 'Machine not found']);
             return;
@@ -63,7 +65,7 @@ class MachineController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        if (!ctype_digit($id) || (int)$id < 1) {
+        if (!ApiResponse::validId($id)) {
             http_response_code(404);
             echo json_encode(['error' => 'Machine not found']);
             return;

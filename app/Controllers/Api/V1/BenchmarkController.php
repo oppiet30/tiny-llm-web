@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controllers\Api\V1;
 
+use Core\ApiResponse;
+
 use App\Models\Benchmark;
 
 class BenchmarkController
@@ -30,7 +32,7 @@ class BenchmarkController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        if (!ctype_digit($id) || (int)$id < 1) {
+        if (!ApiResponse::validId($id)) {
             http_response_code(404);
             echo json_encode(['error' => 'Benchmark run not found']);
             return;
