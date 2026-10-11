@@ -1,6 +1,6 @@
 # Tiny LLM Development — TODO
 
-Status reviewed: 2026-10-09.
+Status reviewed: 2026-10-10.
 
 This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark database, PHP MVC dashboard, comparison charts, and automated tests. Checkboxes record confirmed work versus remaining tasks.
 
@@ -43,7 +43,8 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Add a PHP 8.5 Docker test environment and GitHub Actions CI checks (PR #1).
 - [x] Add a clickable GitHub Actions status badge to README.
 - [x] Remove misplaced `train.py` from the web repository (PR #4); training code remains in `oppiet30/tiny-llm`.
-- [ ] Confirm benchmark charts and summary statistics render correctly on Dell's Apache/PHP installation.
+- [x] Confirm benchmark charts render on Dell's Apache/PHP installation after switching to the feature branch; PR #8 merged.
+- [ ] Verify narrow-screen chart and statistics-table layout with real data.
 
 ## 4. Benchmark comparison page (`/compare`)
 
@@ -69,10 +70,12 @@ This checklist tracks the CPU-only TinyGPT training project, MariaDB benchmark d
 - [x] Compare mean CPU training throughput across machines for matching workload filters (PR #3).
 - [x] Add repeat-run count, mean, minimum, maximum, and sample standard deviation (PR #3).
 - [x] Expand the project README with installation, routes, API, and development guidance.
-- [ ] Add additional benchmarks and historical trend views.
-- [ ] Improve benchmark reproduction instructions and document the measurement methodology.
-- [ ] Add database-backed integration tests with disposable MariaDB fixtures.
+- [x] Add historical trend views with dataset/model/machine filters (PR #7).
+- [ ] Add additional benchmark measurements as training completes.
+- [x] Improve benchmark reproduction instructions and document the measurement methodology in `docs/BENCHMARKING.md`.
+- [x] Add database-backed integration tests with disposable MariaDB fixtures.
+- [x] Add machine-average and individual-run comparison chart modes with regression tests (PR #8).
 
 ## Next milestone
 
-Verify `/compare` chart rendering and responsive layout on Dell with real benchmark data, then expand integration coverage and benchmark history visualizations. The `/compare` default remains Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps; selectors allow other groups.
+Verify the narrow-screen layout on Dell, complete missing training benchmarks (including Raspberry Pi 5 Gutenberg), and import their results. Smoke-test application pages and API endpoints after updates. The `/compare` default remains Gutenberg 50 MiB / TinyGPT-853K / 10,000 steps; selectors allow other groups.

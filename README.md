@@ -13,6 +13,7 @@ The application is part of the Tiny LLM project and provides a web interface and
 - **Models and datasets** — browse model and dataset records.
 - **Benchmark run details** — inspect an individual run.
 - **Benchmark comparison** — filter runs by dataset, model, and total training-step count; compare runtime, throughput, and loss values.
+- **Benchmark history** — chronological throughput charts with dataset, model, and machine filters.
 - **Versioned JSON API** — read machines, models, datasets, and benchmark runs under `/api/v1`.
 - **Responsive navigation and styling** — shared navigation and CSS-based layout.
 
@@ -111,6 +112,7 @@ The exact URL depends on the server configuration. The application derives its b
 | `/datasets/{id}` | Dataset details |
 | `/runs/{id}` | Individual benchmark run |
 | `/compare` | Compare matching benchmark runs |
+| `/history` | Historical throughput charts |
 
 ### JSON API
 
@@ -152,6 +154,8 @@ Only runs matching all three selections are included. Each matching run shows th
 
 Throughput is calculated from the number of steps completed in the run divided by its runtime. For resumed runs, the database query uses `steps_this_run` when available and otherwise falls back to `training_steps`.
 
+The Chart view selector offers machine averages and individual runs; both keep the individual results table. See [benchmark reproduction and measurement methodology](docs/BENCHMARKING.md) for runnable training commands, timing boundaries, resumed-run calculations, and comparison limitations.
+
 When comparing hardware, keep the dataset, model configuration, and training-step count the same. Repeated runs help reveal normal performance variation; a single run is not enough to estimate that variation.
 
 ## Development and testing
@@ -165,7 +169,21 @@ find . -path './.git' -prune -o -name '*.php' -type f -print0 \
   | xargs -0 -n1 php -l
 ```
 
-Run `composer install` and `composer test` for PHPUnit. GitHub Actions also runs the Docker test image, MariaDB integration tests, and API HTTP checks against disposable fixtures. Check the Actions tab for the current results.
+PHPUnit 13 tests and GitHub Actions are established on `main`. Development tests require PHP 8.5 with mysqli, dom, mbstring, xml, and xmlwriter, plus Composer. Install and run them with:
+
+```bash
+composer update --no-interaction --prefer-dist
+composer test
+```
+
+Alternatively, use the isolated PHP 8.5 Docker image:
+
+```bash
+docker build -f Dockerfile.test -t tiny-llm-web-tests .
+docker run --rm tiny-llm-web-tests
+```
+
+MariaDB integration tests skip without a configured test database. GitHub Actions runs them separately against a disposable MariaDB 11.8 database initialized from `tests/fixtures/mariadb-integration.sql`; never load that fixture into the production benchmark database. The workflow also checks PHP syntax, runs the Docker PHPUnit suite, and runs API HTTP checks against the disposable database. Check the Actions tab for the current results.
 
 ## Security notes
 
