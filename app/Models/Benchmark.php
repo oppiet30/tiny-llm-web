@@ -239,7 +239,15 @@ class Benchmark
                 m.hostname,
                 m.cpu_model,
                 mo.name AS model_name,
+                mo.block_size AS context_window,
                 d.name AS dataset_name,
+                CASE WHEN b.batch_size IS NOT NULL AND b.steps_this_run IS NOT NULL
+                    THEN CAST(b.batch_size AS UNSIGNED) * b.steps_this_run
+                    ELSE NULL END AS training_sequences,
+                CASE WHEN b.batch_size IS NOT NULL AND b.steps_this_run IS NOT NULL
+                    AND mo.block_size IS NOT NULL
+                    THEN CAST(b.batch_size AS UNSIGNED) * b.steps_this_run * mo.block_size
+                    ELSE NULL END AS character_positions,
                 COALESCE(b.steps_this_run, b.training_steps)
                     / NULLIF(b.real_seconds, 0) AS steps_per_second
             FROM benchmark_runs b
