@@ -20,6 +20,9 @@ $sections = [
         'training_steps' => 'Target Training Steps',
         'steps_this_run' => 'Steps This Run',
         'batch_size' => 'Batch Size',
+        'context_window' => 'Context Window (characters)',
+        'training_sequences' => 'Training Sequences Processed',
+        'character_positions' => 'Character Positions Processed',
         'learning_rate' => 'Learning Rate',
         'pytorch_version' => 'PyTorch Version',
         'pytorch_threads' => 'PyTorch Threads',
@@ -79,6 +82,9 @@ $sections = [
                                     'training_steps',
                                     'steps_this_run',
                                     'batch_size',
+                                    'context_window',
+                                    'training_sequences',
+                                    'character_positions',
                                     'pytorch_threads',
                                     'interop_threads'
                                 ], true)) {
